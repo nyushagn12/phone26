@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000000;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        :root {
+            --btn-color: rgba(255, 255, 255, 0.77);
+            --btn-shine: rgba(255, 255, 255, 1.0);
+        }
+
+        .smart-btn {
+            font-family: "San Francisco", Inter, Roboto, sans-serif;
+            font-size: 24px;
+            font-weight: 400;
+            color: black;
+            
+            height: 50px;
+            min-width: 50px; 
+            padding: 0 18px;
+            box-sizing: border-box;
+            border-radius: 9999px;
+
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            cursor: pointer;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            
+            position: relative; 
+            z-index: 10;
+
+            background-color: var(--btn-color);
+            box-shadow: inset 0 0 0 1px var(--btn-shine);
+
+            transform: translate(0px, 0px) scale(1);
+            opacity: 1;
+            
+            transition: transform 0.2s ease-out, filter 0.2s;
+            backdrop-filter: brightness(100%);
+        }
+
+        .smart-btn.pressed {
+            backdrop-filter: brightness(122%);
+        }
+
+        .smart-btn.dragging {
+            transition: none;
+            filter: brightness(1.22);
+            cursor: grabbing;
+        }
+
+        .smart-btn.shrinking {
+            transform: translate(0px, 0px) scale(0.95) !important;
+            filter: brightness(1); 
+            transition: transform 0.2s ease-out, filter 0.2s;
+        }
+
+        .smart-btn.bouncing {
+            transform: translate(0px, 0px);
+            animation: final-bounce 0.4s ease-out forwards;
+        }
+
+        @keyframes final-bounce {
+            0% { transform: scale(0.97); }
+            40% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <button id="myBtn" class="smart-btn">1</button>
+
+    <script>
+        const btn = document.getElementById('myBtn');
+        let startTime = 0;
+        let isPressed = false;
+        
+        const STRETCH_FORCE = 0.033; 
+        const MAX_DIST = 25; 
+
+        let shrinkTimer = null;
+        let bounceTimer = null;
+
+        const handlePress = (e) => {
+            if (e.cancelable && e.type !== 'touchstart') e.preventDefault();
+            
+            clearTimeout(shrinkTimer);
+            clearTimeout(bounceTimer);
+            btn.classList.remove('shrinking', 'bouncing', 'dragging');
+            void btn.offsetWidth; 
+
+            isPressed = true;
+            startTime = new Date().getTime();
+
+            btn.classList.add('pressed');
+            btn.style.transform = "translate(0px, 0px) scale(1.33)";
+        };
+
+        const handleDrag = (e) => {
+            if (!isPressed) return;
+
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+
+            const deltaX = clientX - centerX;
+            const deltaY = clientY - centerY;
+
+            let moveX = deltaX * STRETCH_FORCE;
+            let moveY = deltaY * STRETCH_FORCE;
+
+            const dist = Math.sqrt(moveX * moveX + moveY * moveY);
+            if (dist > MAX_DIST) {
+                const ratio = MAX_DIST / dist;
+                moveX *= ratio;
+                moveY *= ratio;
+            }
+
+            btn.classList.add('dragging');
+            btn.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.33)`;
+        };
+
+        const handleRelease = (e) => {
+            if (!isPressed) return;
+            isPressed = false;
+
+            const endTime = new Date().getTime();
+            const duration = endTime - startTime;
+
+            if (duration < 200) {
+                console.log("Action: < 200ms");
+            } else {
+                console.log("Action: > 200ms");
+            }
+            
+            btn.style.transform = ""; 
+            btn.classList.remove('pressed', 'dragging');
+            btn.classList.add('shrinking');
+
+            shrinkTimer = setTimeout(() => {
+                btn.classList.remove('shrinking');
+                btn.classList.add('bouncing');
+
+                bounceTimer = setTimeout(() => {
+                    btn.classList.remove('bouncing');
+                }, 400);
+
+            }, 200); 
+        };
+
+        btn.addEventListener('mousedown', handlePress);
+        btn.addEventListener('touchstart', handlePress, { passive: false });
+
+        window.addEventListener('mousemove', handleDrag);
+        window.addEventListener('touchmove', handleDrag, { passive: false });
+
+        window.addEventListener('mouseup', handleRelease);
+        window.addEventListener('touchend', handleRelease);
+    </script>
+</body>
+</html>
