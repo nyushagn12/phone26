@@ -53,7 +53,7 @@
             transform: translate(0px, 0px) scale(1);
             opacity: 1;
             
-            transition: transform 0.2s ease-out, background-color 0.2s ease;
+            transition: transform 0.35s ease-out, background-color 0.45s ease;
             backdrop-filter: brightness(100%);
         }
 
@@ -70,7 +70,7 @@
         .smart-btn.shrinking {
             transform: translate(0px, 0px) scale(0.95) !important;
             filter: brightness(1); 
-            transition: transform 0.2s ease-out, filter 0.2s;
+            transition: transform 0.35s ease-out, background-color 0.45s;
         }
 
         .smart-btn.bouncing {
@@ -95,7 +95,7 @@
         let startTime = 0;
         let isPressed = false;
         
-        const STRETCH_FORCE = 0.077; 
+        const STRETCH_FORCE = 0.067; 
         const MAX_DIST = 33; 
 
         let shrinkTimer = null;
@@ -183,6 +183,7 @@
     </script>
 </body>
 </html>
+
 
 
 
