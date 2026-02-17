@@ -10,13 +10,13 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #FFFFFF;
+            background-color: #F0F0F0;
             margin: 0;
             overflow: hidden;
         }
 
         :root {
-            --btn-color: rgba(255, 255, 255, 0.77);
+            --btn-color: rgba(255, 255, 255, 0.33);
             --btn-shine: rgba(255, 255, 255, 1.0);
         }
 
@@ -44,22 +44,22 @@
             z-index: 10;
 
             background-color: var(--btn-color);
-            box-shadow: inset 0 0 0 1px var(--btn-shine);
+            box-shadow: inset 0 -10 0 10px var(--btn-shine);
 
             transform: translate(0px, 0px) scale(1);
             opacity: 1;
             
-            transition: transform 0.2s ease-out, filter 0.2s;
+            transition: transform 0.2s ease-out, background-color 0.2s ease;
             backdrop-filter: brightness(100%);
         }
 
         .smart-btn.pressed {
-            backdrop-filter: brightness(122%);
+            backdrop-filter: brightness(100%);
         }
 
         .smart-btn.dragging {
             transition: none;
-            filter: brightness(1.22);
+            filter: brightness(1.00); <!-- This is too useless, does anything BUT changes the brightness to 1.22 -->
             cursor: grabbing;
         }
 
@@ -110,6 +110,7 @@
 
             btn.classList.add('pressed');
             btn.style.transform = "translate(0px, 0px) scale(1.33)";
+            btn.style.setProperty('--btn-color', 'rgba(255, 255, 255, 0.66)');
         };
 
         const handleDrag = (e) => {
@@ -152,6 +153,7 @@
             }
             
             btn.style.transform = ""; 
+            btn.style.setProperty('--btn-color', 'rgba(255, 255, 255, 0.33)');
             btn.classList.remove('pressed', 'dragging');
             btn.classList.add('shrinking');
 
@@ -177,4 +179,5 @@
     </script>
 </body>
 </html>
+
 
