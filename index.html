@@ -20,7 +20,7 @@
         }
 
         :root {
-            --btn-color: rgba(255, 255, 255, 0.22);
+            --btn-color: rgba(255, 255, 255, 0.07);
             --btn-shine: rgba(255, 255, 255, 1.0);
         }
 
@@ -75,12 +75,12 @@
 
         .smart-btn.bouncing {
             transform: translate(0px, 0px);
-            animation: final-bounce 0.4s ease-out forwards;
+            animation: final-bounce 0.8s ease-out forwards;
         }
 
         @keyframes final-bounce {
-            0% { transform: scale(0.97); }
-            40% { transform: scale(1.02); }
+            0% { transform: scale(0.95); }
+            40% { transform: scale(1.05); }
             100% { transform: scale(1); }
             100% { transform: scale(1); }
         }
@@ -113,8 +113,8 @@
             startTime = new Date().getTime();
 
             btn.classList.add('pressed');
-            btn.style.transform = "translate(0px, 0px) scale(1.33)";
-            btn.style.setProperty('--btn-color', 'rgba(255, 255, 255, 0.66)');
+            btn.style.transform = "translate(0px, 0px) scale(1.25)";
+            btn.style.setProperty('--btn-color', 'rgba(255, 255, 255, 0.14)');
         };
 
         const handleDrag = (e) => {
@@ -140,7 +140,7 @@
             }
 
             btn.classList.add('dragging');
-            btn.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.33)`;
+            btn.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.25)`;
         };
 
         const handleRelease = (e) => {
@@ -157,7 +157,7 @@
             }
             
             btn.style.transform = ""; 
-            btn.style.setProperty('--btn-color', 'rgba(255, 255, 255, 0.22)');
+            btn.style.setProperty('--btn-color', 'rgba(255, 255, 255, 0.07)');
             btn.classList.remove('pressed', 'dragging');
             btn.classList.add('shrinking');
 
@@ -183,6 +183,7 @@
     </script>
 </body>
 </html>
+
 
 
 
